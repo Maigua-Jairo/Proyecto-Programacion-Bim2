@@ -13,6 +13,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    contacto.h \
     mainwindow.h
 
 FORMS += \

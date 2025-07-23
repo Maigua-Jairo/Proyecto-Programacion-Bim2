@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "contacto.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,7 +18,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_BtnGuardar_clicked();
+
+    void on_BtnAgregar_clicked();
+
 private:
     Ui::MainWindow *ui;
+    QList<Contacto> listaContactos;
 };
 #endif // MAINWINDOW_H
