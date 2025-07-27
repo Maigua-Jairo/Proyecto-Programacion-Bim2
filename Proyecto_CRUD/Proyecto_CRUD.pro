@@ -10,14 +10,17 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    personas.cpp
 
 HEADERS += \
     contacto.h \
-    mainwindow.h
+    mainwindow.h \
+    personas.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    personas.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

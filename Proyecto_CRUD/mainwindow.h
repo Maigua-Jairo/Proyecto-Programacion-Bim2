@@ -19,9 +19,10 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_BtnGuardar_clicked();
 
     void on_BtnAgregar_clicked();
+
+    void on_BtnEliminar_clicked();
 
 private:
     Ui::MainWindow *ui;

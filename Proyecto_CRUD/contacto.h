@@ -7,6 +7,6 @@ struct Contacto {
     QString nombre;
     QString telefono;
     QString email;
-    QString pais;
+    QString apellido;
 };
 #endif // CONTACTO_H
