@@ -122,8 +122,58 @@ void MainWindow::on_btnActualizar_clicked()
     ui->lineEditCorreo->clear();
     ui->lineEditDireccion->clear();
 }
+
 void MainWindow::on_BtnEliminar_clicked()
 {
+    QString nombreaEliminar = ui->lineEditBuscar->text().trimmed();
+    if (nombreaEliminar.isEmpty()){
+        QMessageBox::warning(this, "Error", "Ingrese el nomrbe del contacto a eliminar");
+        return;
+    }
+    QFile archivo("contactos.txt");
+    if (!archivo.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, "Error", "No se pudo abrir el archivo.");
+        return;
+    }
 
+    QTextStream in(&archivo);
+    QStringList nuevasLineas;
+    bool eliminado = false;
+
+    // Leemos el archivo y omitimos el contacto a eliminar
+    while (!in.atEnd()) {
+        QString linea = in.readLine().trimmed();
+        QStringList campos = linea.split(";");
+
+        if (campos.size() == 4 && campos[0] == nombreaEliminar) {
+            eliminado = true;
+            continue; // no guardamos esta línea
+        }
+        nuevasLineas << linea;
+    }
+    archivo.close();
+
+    if (!eliminado) {
+        QMessageBox::information(this, "No encontrado", "El contacto no fue encontrado.");
+        return;
+    }
+
+    // Sobrescribimos el archivo con los contactos restantes
+    if (archivo.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+        QTextStream out(&archivo);
+        for (const QString &linea : nuevasLineas) {
+            out << linea << "\n";
+        }
+        archivo.close();
+        QMessageBox::information(this, "Eliminado", "El contacto fue eliminado con éxito.");
+    } else {
+        QMessageBox::warning(this, "Error", "No se pudo abrir el archivo para escribir.");
+    }
+
+    // Limpiar los campos
+    ui->lineEditBuscar->clear();
+    ui->lineEditNombre->clear();
+    ui->lineEditTelefono->clear();
+    ui->lineEditCorreo->clear();
+    ui->lineEditDireccion->clear();
 }
-
