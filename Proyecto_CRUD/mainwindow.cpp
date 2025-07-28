@@ -47,7 +47,81 @@ void MainWindow::on_BtnAgregar_clicked()
     }
 
  }
+void MainWindow::on_btnBuscar_clicked()
+{
+    QString nombreBuscado = ui->lineEditBuscar->text().trimmed();
+    QFile archivo("contactos.txt");
 
+    if (!archivo.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, "Error", "No se pudo abrir el archivo.");
+        return;
+    }
+
+    QTextStream in(&archivo);
+    QString contactoEncontrado;
+    QStringList lineas;
+
+    while (!in.atEnd()) {
+        QString linea = in.readLine().trimmed();
+        QStringList campos = linea.split(";");
+
+        if (campos.size() == 4 && campos[0] == nombreBuscado) {
+            contactoEncontrado = linea;
+            ui->lineEditNombre->setText(campos[0]);
+            ui->lineEditTelefono->setText(campos[1]);
+            ui->lineEditCorreo->setText(campos[2]);
+            ui->lineEditDireccion->setText(campos[3]);
+        } else {
+            lineas << linea;
+        }
+    }
+
+    archivo.close();
+
+    if (contactoEncontrado.isEmpty()) {
+        QMessageBox::information(this, "No encontrado", "El contacto no existe.");
+    } else {
+        contactosSinModificar = lineas;
+    }
+}
+
+void MainWindow::on_btnActualizar_clicked()
+{
+    QString nuevoNombre = ui->lineEditNombre->text().trimmed();
+    QString nuevoTelefono = ui->lineEditTelefono->text().trimmed();
+    QString nuevoCorreo = ui->lineEditCorreo->text().trimmed();
+    QString nuevaDireccion = ui->lineEditDireccion->text().trimmed();
+
+    if (nuevoNombre.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Debe ingresar un nombre válido.");
+        return;
+    }
+
+    QString nuevaLinea = nuevoNombre + ";" + nuevoTelefono + ";" + nuevoCorreo + ";" + nuevaDireccion;
+
+    QFile archivo("contactos.txt");
+    if (!archivo.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, "Error", "No se pudo abrir el archivo para escribir.");
+        return;
+    }
+
+    QTextStream out(&archivo);
+    for (const QString &linea : contactosSinModificar) {
+        out << linea << "\n";
+    }
+
+    out << nuevaLinea << "\n";
+    archivo.close();
+
+    QMessageBox::information(this, "Actualizado", "El contacto se actualizó correctamente.");
+
+    // Limpiar campos
+    ui->lineEditBuscar->clear();
+    ui->lineEditNombre->clear();
+    ui->lineEditTelefono->clear();
+    ui->lineEditCorreo->clear();
+    ui->lineEditDireccion->clear();
+}
 void MainWindow::on_BtnEliminar_clicked()
 {
 
