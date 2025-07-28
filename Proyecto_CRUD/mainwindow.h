@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 #include "contacto.h"
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
+#include <QStringList>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,4 +32,4 @@ private:
     Ui::MainWindow *ui;
     QList<Contacto> listaContactos;
 };
-#endif // MAINWINDOW_H
+#endif //MainWindow_H
