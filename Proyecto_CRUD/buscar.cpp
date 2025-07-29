@@ -18,7 +18,7 @@ Buscar::~Buscar()
 
 void Buscar::on_BtnSearch_accepted()
 {
-
+    accepted();
 }
 
 
