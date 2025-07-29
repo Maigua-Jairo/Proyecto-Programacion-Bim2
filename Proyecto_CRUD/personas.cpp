@@ -31,7 +31,7 @@ Contacto Personas::obtenerContacto() const
 void Personas::on_BtnGuardar_accepted()
 {
 
-    accept();
+    accept();  // Cierra la ventana y notifica éxito
 }
 
 

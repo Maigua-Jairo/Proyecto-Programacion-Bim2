@@ -1,18 +1,21 @@
+// mainwindow.cpp
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QMessageBox>
-#include "contacto.h"
-#include <QTextStream>
-#include <QFile>
 #include "personas.h"
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
+#include "buscar.h"
+#include "eliminar.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("Agenda de Contactos"); //Funcion para cambiar el titulo de la ventana
+    setWindowTitle("Agenda de Contactos");
     ui->lista_contactos->setColumnCount(4);
-    ui->lista_contactos->setHorizontalHeaderLabels({"Nombre", "Teléfono", "Email", "Dirección"});
+    ui->lista_contactos->setHorizontalHeaderLabels({"Nombre", "Apellido", "Teléfono", "Email"});
+    ui->lista_contactos->setRowCount(0);
 }
 
 MainWindow::~MainWindow()
@@ -23,68 +26,29 @@ MainWindow::~MainWindow()
 void MainWindow::on_BtnAgregar_clicked()
 {
     Personas p(this);
-    p.setWindowTitle("Agregar Nuevo Contacto");
+    p.setWindowTitle("Agregar Contacto");
+
     if (p.exec() == QDialog::Accepted) {
-        Contacto c = p.obtenerContacto(); // Obtenemos los datos reales
+        Contacto c = p.obtenerContacto();
 
-        QFile file("C://ListaContactos//contactos.txt"); // Usa doble barra si es necesario
-
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QFile file("C://listaContactos//contactos.txt");
+        if (file.open(QIODevice::Append | QIODevice::Text)) {
             QTextStream out(&file);
-            int numero = listaContactos.size() + 1;
-            out << "Contacto #" << numero << "\n";
             out << "Nombre: " << c.nombre << "\n";
+            out << "Apellido: " << c.apellido << "\n";
             out << "Teléfono: " << c.telefono << "\n";
             out << "Correo: " << c.email << "\n";
             out << "---------------------------\n";
             file.close();
             QMessageBox::information(this, "Guardado", "Contacto guardado correctamente.");
-
         } else {
             QMessageBox::warning(this, "Error", "No se pudo abrir el archivo.");
         }
-         listaContactos.append(c);
-    }
 
- }
-void MainWindow::on_btnBuscar_clicked()
-{
-    QString nombreBuscado = ui->lineEditBuscar->text().trimmed();
-    QFile archivo("contactos.txt");
-
-    if (!archivo.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, "Error", "No se pudo abrir el archivo.");
-        return;
-    }
-
-    QTextStream in(&archivo);
-    QString contactoEncontrado;
-    QStringList lineas;
-
-    while (!in.atEnd()) {
-        QString linea = in.readLine().trimmed();
-        QStringList campos = linea.split(";");
-
-        if (campos.size() == 4 && campos[0] == nombreBuscado) {
-            contactoEncontrado = linea;
-            ui->lineEditNombre->setText(campos[0]);
-            ui->lineEditTelefono->setText(campos[1]);
-            ui->lineEditCorreo->setText(campos[2]);
-            ui->lineEditDireccion->setText(campos[3]);
-        } else {
-            lineas << linea;
-        }
-    }
-
-    archivo.close();
-
-    if (contactoEncontrado.isEmpty()) {
-        QMessageBox::information(this, "No encontrado", "El contacto no existe.");
-    } else {
-        contactosSinModificar = lineas;
     }
 }
 
+<<<<<<< Updated upstream
 void MainWindow::on_btnActualizar_clicked()
 {
     QString nuevoNombre = ui->lineEditNombre->text().trimmed();
@@ -135,6 +99,19 @@ void MainWindow::on_BtnEliminar_clicked()
         QMessageBox::warning(this, "Error", "No se pudo abrir el archivo.");
         return;
     }
+=======
+void MainWindow::on_BtnEliminar_clicked()
+{
+    Eliminar d(this);
+    d.exec();
+}
+
+void MainWindow::on_BtnMostrar_clicked()
+{
+}
+void MainWindow::on_BtnActualizar_clicked()
+{
+>>>>>>> Stashed changes
 
     QTextStream in(&archivo);
     QStringList nuevasLineas;
@@ -177,3 +154,25 @@ void MainWindow::on_BtnEliminar_clicked()
     ui->lineEditCorreo->clear();
     ui->lineEditDireccion->clear();
 }
+<<<<<<< Updated upstream
+=======
+
+void MainWindow::actualizarTabla()
+{
+    ui->lista_contactos->setRowCount(listaContactos.size());
+    for (int i = 0; i < listaContactos.size(); ++i) {
+        ui->lista_contactos->setItem(i, 0, new QTableWidgetItem(listaContactos[i].nombre));
+        ui->lista_contactos->setItem(i, 1, new QTableWidgetItem(listaContactos[i].apellido));
+         ui->lista_contactos->setItem(i, 2, new QTableWidgetItem(listaContactos[i].telefono));
+        ui->lista_contactos->setItem(i, 3, new QTableWidgetItem(listaContactos[i].email));
+    }
+}
+
+
+void MainWindow::on_BtnSalir_clicked()
+{
+    QMessageBox:: warning(this, "ADVERTENCIA", "El programa ha finalizado");
+    close();
+}
+
+>>>>>>> Stashed changes

@@ -26,9 +26,18 @@ private slots:
 
     void on_BtnAgregar_clicked();
 
+    void on_BtnMostrar_clicked();
+
+    void on_BtnActualizar_clicked();
+
+    void on_BtnSalir_clicked();
+
     void on_BtnEliminar_clicked();
 
 private:
+    void actualizarTabla();
+    void cargarDesdeArchivo();
+
     Ui::MainWindow *ui;
     QList<Contacto> listaContactos;
 };
