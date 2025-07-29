@@ -170,7 +170,7 @@ void MainWindow::on_BtnEliminar_clicked()
         QMessageBox::warning(this, "Error", "No se pudo abrir el archivo para escribir.");
     }
 
-    // Limpiar los campos
+    //Limpiar los campos 
     ui->lineEditBuscar->clear();
     ui->lineEditNombre->clear();
     ui->lineEditTelefono->clear();
